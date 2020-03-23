@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>404142523244-v5ml7k1tncdet82vf5i272q2d9pe4o6b.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.404142523244-v5ml7k1tncdet82vf5i272q2d9pe4o6b</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>404142523244-5576uk6kl7hs6kk392hfgcqnl0sh2lc3.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA-gHCeu22o6Db6h9mVxesNb9Frc0j40Us</string>
+	<key>GCM_SENDER_ID</key>
+	<string>404142523244</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>systems.gadget.viaductharbour</string>
+	<key>PROJECT_ID</key>
+	<string>bright-nights</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bright-nights.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:404142523244:ios:9abeccd151c425b683a949</string>
+	<key>DATABASE_URL</key>
+	<string>https://bright-nights.firebaseio.com</string>
+</dict>
+</plist>

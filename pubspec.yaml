@@ -1,0 +1,47 @@
+name: viaductharbour
+description: Viaduct Harbour
+
+version: 0.0.0+1
+
+environment:
+  sdk: ">=2.3.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+  rxdart: ^0.22.0
+  firebase_auth: ^0.15.5+2
+  google_sign_in: ^4.1.4
+  flutter_facebook_login: ^3.0.0
+  cloud_firestore: ^0.13.4+2
+  firebase_storage: ^3.1.1
+  permission_handler: 4.2.0+hotfix.3
+  geolocator: ^5.3.0
+  carousel_slider: ^1.4.1
+  google_maps_flutter: 0.5.24+1
+  bitmap: ^0.0.6
+  url_launcher: ^5.4.2
+  app_settings: ^3.0.1
+  cached_network_image: ^2.0.0
+  intl: ^0.16.1
+  firebase_messaging: ^6.0.12
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+   - assets/
+   - assets/images/
+
+  fonts:
+    - family: Gilroy
+      fonts:
+        - asset: assets/fonts/Gilroy-Regular.otf
+          weight: 500
+        - asset: assets/fonts/Gilroy-ExtraBold.otf
+          weight: 700

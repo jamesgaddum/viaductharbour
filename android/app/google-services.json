@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "404142523244",
+    "firebase_url": "https://bright-nights.firebaseio.com",
+    "project_id": "bright-nights",
+    "storage_bucket": "bright-nights.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404142523244:android:3a48fc818563aead83a949",
+        "android_client_info": {
+          "package_name": "systems.gadget.brightnights"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404142523244-aj27h481no8h59p7ptdqjfusp5drssq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCovmgC-5yvjsXkSIpiacItNCUPyjMFDqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404142523244-aj27h481no8h59p7ptdqjfusp5drssq4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "404142523244-v5ml7k1tncdet82vf5i272q2d9pe4o6b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "systems.gadget.viaductharbour"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404142523244:android:ac542d0dd19a2e9983a949",
+        "android_client_info": {
+          "package_name": "systems.gadget.viaductharbour"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404142523244-lp843bl65mbcjcvhhc5brc34ol96vm8l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "systems.gadget.viaductharbour",
+            "certificate_hash": "a94eeb6e1ef7a1bcbc6d09e9faba365476406fce"
+          }
+        },
+        {
+          "client_id": "404142523244-aj27h481no8h59p7ptdqjfusp5drssq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCovmgC-5yvjsXkSIpiacItNCUPyjMFDqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404142523244-aj27h481no8h59p7ptdqjfusp5drssq4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "404142523244-v5ml7k1tncdet82vf5i272q2d9pe4o6b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "systems.gadget.viaductharbour"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
