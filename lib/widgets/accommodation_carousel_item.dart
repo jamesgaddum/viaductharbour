@@ -17,7 +17,7 @@ class AccommodationCarouselItem extends StatelessWidget {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
               color: Colors.grey[300],

@@ -11,7 +11,7 @@ class PermissionsBloc {
   Future<void> requestPermissions(BuildContext context) async {
     await requestLocationPermissions();
     await requestNotificationPermissions();
-    await Navigator.of(context).pushReplacementNamed(Routes.home);
+    await Navigator.of(context).pushReplacementNamed(Routes.places);
   }
 
   Future<void> requestLocationPermissions() async {
@@ -45,17 +45,4 @@ class PermissionsBloc {
     );
   }
   void dispose() {}
-}
-
-class PermissionsBlocProvider extends InheritedWidget {
-
-  PermissionsBlocProvider({Widget child}) : super(child: child);
-
-  final bloc = PermissionsBloc();
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => true;
-
-  static PermissionsBlocProvider of(BuildContext context) =>
-    context.dependOnInheritedWidgetOfExactType();
 }

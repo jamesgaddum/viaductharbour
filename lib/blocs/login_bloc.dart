@@ -1,5 +1,4 @@
 import 'package:viaductharbour/repositories/user_repository.dart';
-import 'package:flutter/material.dart';
 
 class LoginBloc {
 
@@ -14,17 +13,4 @@ class LoginBloc {
   }
 
   void dispose() {}
-}
-
-class LoginBlocProvider extends InheritedWidget {
-
-  LoginBlocProvider({Widget child}) : super(child: child);
-
-  final bloc = LoginBloc();
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => true;
-
-  static LoginBlocProvider of(BuildContext context) =>
-    context.dependOnInheritedWidgetOfExactType();
 }

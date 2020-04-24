@@ -1,29 +1,34 @@
 import 'dart:async';
 // import 'package:geolocator/geolocator.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:viaductharbour/models/accommodation.dart';
 import 'package:viaductharbour/models/cruise.dart';
 import 'package:viaductharbour/models/event.dart';
 // import 'package:viaductharbour/models/location.dart';
 import 'package:viaductharbour/models/restaurant.dart';
-import 'package:flutter/material.dart';
 import 'package:viaductharbour/models/transport.dart';
 import 'package:viaductharbour/repositories/accommodation_repository.dart';
 import 'package:viaductharbour/repositories/cruise_repository.dart';
 import 'package:viaductharbour/repositories/event_repository.dart';
 import 'package:viaductharbour/repositories/restaurant_repository.dart';
 import 'package:viaductharbour/repositories/transport_repository.dart';
+import 'package:viaductharbour/services/permissions_service.dart';
 // import 'package:viaductharbour/services/permissions_service.dart';
 
 class ViaductBloc {
 
-  ViaductBloc() {
+  ViaductBloc({
+    @required this.permissionsService
+  }) {
     _registerForLocationUpdates();
     // _registerForPositionUpdates(restaurantsStream);
     // _registerForPositionUpdates(accommodationsStream);
     // _registerForPositionUpdates(cruiseStream);
     // _registerForPositionUpdates(transportStream);
   }
+
+  final PermissionsService permissionsService;
 
   final _restaurantRepository = RestaurantRepository();
   final _eventRepository = EventRepository();
@@ -91,17 +96,4 @@ class ViaductBloc {
     transportStream.close();
     _subscriptions.forEach((sub) => sub.cancel());
   }
-}
-
-class ViaductBlocProvider extends InheritedWidget {
-
-  ViaductBlocProvider({Widget child}) : super(child: child);
-
-  final bloc = ViaductBloc();
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => true;
-
-  static ViaductBlocProvider of(BuildContext context) =>
-    context.dependOnInheritedWidgetOfExactType();
 }

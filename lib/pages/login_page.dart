@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:viaductharbour/blocs/login_bloc.dart';
 import 'package:viaductharbour/routes.dart';
 import 'package:viaductharbour/strings.dart';
@@ -19,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bloc = LoginBlocProvider.of(context).bloc;
+    _bloc = Provider.of<LoginBloc>(context);
   }
 
   @override

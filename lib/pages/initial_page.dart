@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:viaductharbour/blocs/initial_bloc.dart';
 
 class InitialPage extends StatefulWidget {
@@ -12,9 +13,9 @@ class _InitialPageState extends State<InitialPage> {
 
   @override
   void didChangeDependencies() {
-    _bloc = InitialBlocProvider.of(context).bloc;
-    _bloc.obtainCurrentUser(context);
     super.didChangeDependencies();
+    _bloc = Provider.of<InitialBloc>(context);
+    _bloc.obtainCurrentUser(context);
   }
 
   @override

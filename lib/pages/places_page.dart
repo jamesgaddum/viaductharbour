@@ -3,6 +3,7 @@ import 'package:bitmap/transformations.dart' as bmp;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:viaductharbour/blocs/viaduct_bloc.dart';
 import 'package:viaductharbour/blocs/viaduct_drawer_bloc.dart';
@@ -12,6 +13,7 @@ import 'package:viaductharbour/strings.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:viaductharbour/widgets/accommodation_tile.dart';
 import 'package:viaductharbour/widgets/cruise_tile.dart';
+import 'package:viaductharbour/widgets/location_type_selector.dart';
 import 'package:viaductharbour/widgets/restaurant_tile.dart';
 import 'package:viaductharbour/widgets/transport_tile.dart';
 import 'package:viaductharbour/widgets/viaduct_drawer.dart';
@@ -24,7 +26,6 @@ class PlacesPage extends StatefulWidget {
 
 class _PlacesPageState extends State<PlacesPage> {
 
-  static const double _zoom = 15.7;
   static const appBarHeight = 95.0;
   static const bottomAppBarHeight = 80.0;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -32,14 +33,20 @@ class _PlacesPageState extends State<PlacesPage> {
 
   Map<LocationType, LatLng> _centers = {
     LocationType.accommodation: LatLng(-36.844029, 174.760516),
-    LocationType.restaurants: LatLng(-36.843462, 174.762039),
+    LocationType.restaurants: LatLng(-36.843462, 174.762539),
     LocationType.cruises: LatLng(-36.843162, 174.761321),
     LocationType.transport: LatLng(-36.844045, 174.764700),
   };
 
+  Map<LocationType, double> _zooms = {
+    LocationType.accommodation: 16.1,
+    LocationType.restaurants: 17.2,
+    LocationType.cruises: 16.2,
+    LocationType.transport: 15.7,
+  };
+
   GoogleMapController _mapController;
   ScrollController _listScrollController;
-  ScrollController _locationsSelectorScrollController;
   Location _selectedLocation;
   BitmapDescriptor _pin;
   BitmapDescriptor _selectedPin;
@@ -51,7 +58,6 @@ class _PlacesPageState extends State<PlacesPage> {
     super.initState();
     _locationType = LocationType.restaurants;
     _listScrollController = ScrollController();
-    _locationsSelectorScrollController = ScrollController();
     _isMapView = true;
     _setLocationIcons();
   }
@@ -59,7 +65,15 @@ class _PlacesPageState extends State<PlacesPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _homeBloc = ViaductBlocProvider.of(context).bloc;
+    _homeBloc = Provider.of<ViaductBloc>(context);
+    Map<String, dynamic> args = ModalRoute.of(context).settings.arguments;
+    if (args != null) {
+      setState(() {
+        _locationType = args.containsKey('locationType') ? args['locationType'] : LocationType.restaurants;
+        _isMapView = args.containsKey('isMapView') ? args['isMapView'] : true;
+        _selectedLocation = args.containsKey('selectedLocation') ? args['selectedLocation'] : null;
+      });
+    }
   }
 
   @override
@@ -92,132 +106,6 @@ class _PlacesPageState extends State<PlacesPage> {
 
         var locations = snapshot.data[describeEnum(_locationType)];
 
-        var locationSelector = Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Container(
-            height: 70,
-            decoration: BoxDecoration(
-              color: theme.primaryColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 8.5,
-                  offset: Offset(0, 8)
-                ),
-              ]
-            ),
-            child: ListView(
-              controller: _locationsSelectorScrollController,
-              scrollDirection: Axis.horizontal,
-              physics: ClampingScrollPhysics(),
-              children: <Widget>[
-                FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedLocation = null;
-                      _locationType = LocationType.restaurants;
-                    });
-                    _locationsSelectorScrollController.animateTo(
-                      0.0,
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.linear
-                    );
-                    _centerMap();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                    child: Text(
-                      Strings.restaurants,
-                      style: _locationType == LocationType.restaurants
-                        ? theme.textTheme.body2.copyWith(
-                            color: theme.accentColor
-                          )
-                        : theme.textTheme.body2
-                    ),
-                  )
-                ),
-                FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedLocation = null;
-                      _locationType = LocationType.accommodation;
-                    });
-                    _locationsSelectorScrollController.animateTo(
-                      size.width * 0.1,
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.linear
-                    );
-                    _centerMap();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                    child: Text(
-                      Strings.accommodation,
-                      style: _locationType == LocationType.accommodation
-                        ? theme.textTheme.body2.copyWith(
-                            color: theme.accentColor
-                          )
-                        : theme.textTheme.body2
-                    ),
-                  )
-                ),
-                FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedLocation = null;
-                      _locationType = LocationType.cruises;
-                    });
-                    _locationsSelectorScrollController.animateTo(
-                      size.width * 0.4,
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.linear
-                    );
-                    _centerMap();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                    child: Text(
-                      Strings.cruises,
-                      style: _locationType == LocationType.cruises
-                        ? theme.textTheme.body2.copyWith(
-                            color: theme.accentColor
-                          )
-                        : theme.textTheme.body2
-                    ),
-                  )
-                ),
-                FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedLocation = null;
-                      _locationType = LocationType.transport;
-                    });
-                    _locationsSelectorScrollController.animateTo(
-                      size.width,
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.linear
-                    );
-                    _centerMap();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                    child: Text(
-                      Strings.transport,
-                      style: _locationType == LocationType.transport
-                        ? theme.textTheme.body2.copyWith(
-                            color: theme.accentColor
-                          )
-                        : theme.textTheme.body2
-                    ),
-                  )
-                ),
-              ],
-            ),
-          )
-        );
-
         var mapView = Stack(
           children: <Widget>[
             Positioned.fill(
@@ -225,12 +113,13 @@ class _PlacesPageState extends State<PlacesPage> {
                 onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
                   target: _centers[_locationType],
-                  zoom: _zoom,
+                  zoom: _zooms[_locationType],
                 ),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: false,
                 markers: _getMarkers(locations),
                 mapToolbarEnabled: false,
+                buildingsEnabled: false,
                 onTap: (location) {
                   setState(() {
                     if (_selectedLocation != null) {
@@ -269,7 +158,15 @@ class _PlacesPageState extends State<PlacesPage> {
                 : Container(),
               ),
             ),
-            locationSelector,
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: LocationTypeSelector(
+                onSelect: _selectLocationType,
+                locationType: _locationType
+              ),
+            ),
             Positioned(
               top: 0,
               left: 0,
@@ -278,6 +175,7 @@ class _PlacesPageState extends State<PlacesPage> {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 automaticallyImplyLeading: false,
+                brightness: Brightness.light,
                 actions: <Widget>[
                   GestureDetector(
                     onTap: () {
@@ -287,7 +185,8 @@ class _PlacesPageState extends State<PlacesPage> {
                       });
                       _centerMap();
                     },
-                    child: Padding(
+                    child: Container(
+                      color: Colors.transparent,
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
                       child: Text(
                         _isMapView ? Strings.listView : Strings.mapView,
@@ -301,6 +200,15 @@ class _PlacesPageState extends State<PlacesPage> {
                   ),
                 ],
               ),
+            ),
+            if (locations.isEmpty) Positioned.fill(
+              child: Opacity(
+                opacity: 0.5,
+                child: Container(
+                  color: Colors.white,
+                  child: Center(child: CircularProgressIndicator(),)
+                ),
+              )
             )
           ]
         );
@@ -331,7 +239,15 @@ class _PlacesPageState extends State<PlacesPage> {
                 )
               ),
             ),
-            locationSelector,
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: LocationTypeSelector(
+                onSelect: _selectLocationType,
+                locationType: _locationType
+              ),
+            ),
             Positioned(
               top: 0,
               left: 0,
@@ -341,6 +257,7 @@ class _PlacesPageState extends State<PlacesPage> {
                 child: AppBar(
                   automaticallyImplyLeading: false,
                   elevation: 0,
+                  brightness: Brightness.light,
                   actions: <Widget>[
                     GestureDetector(
                       onTap: () {
@@ -349,7 +266,8 @@ class _PlacesPageState extends State<PlacesPage> {
                           _isMapView = !_isMapView;
                         });
                       },
-                      child: Padding(
+                      child: Container(
+                        color: Colors.transparent,
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
                         child: Text(
                           _isMapView ? Strings.listView : Strings.mapView,
@@ -377,7 +295,7 @@ class _PlacesPageState extends State<PlacesPage> {
           key: _scaffoldKey,
           endDrawer: ViaductDrawerBlocProvider(
             child: ViaductDrawer(
-              hiddenMenuItems: [MenuItem.places],
+              hiddenMenuItems: [],
             ),
           ),
           body: Container(
@@ -387,17 +305,19 @@ class _PlacesPageState extends State<PlacesPage> {
           ),
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
-            currentIndex: 1,
+            currentIndex: 0,
             selectedItemColor: theme.accentColor,
             backgroundColor: theme.scaffoldBackgroundColor,
-            onTap: (value) => Navigator.of(context).popUntil(ModalRoute.withName(Routes.home)),
+            onTap: (index) => index == 0
+              ? null
+              : Navigator.of(context).pushNamed(Routes.home),
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                title: Text(Strings.home),
+                title: Text(Strings.places),
                 icon: Container(),
               ),
               BottomNavigationBarItem(
-                title: Text(Strings.places),
+                title: Text(Strings.home),
                 icon: Container()
               )
             ],
@@ -426,7 +346,7 @@ class _PlacesPageState extends State<PlacesPage> {
   }
 
   void _setLocationIcons() async {
-    var pin = await _getLocationIconFromAsset('assets/images/pin.png');
+    var pin = await _getLocationIconFromAsset(_getLocationIconAsset());
     var selectedPin = await _getLocationIconFromAsset('assets/images/selected_pin.png');
     setState(() {
       _pin = pin;
@@ -434,9 +354,18 @@ class _PlacesPageState extends State<PlacesPage> {
     });
   }
 
+  String _getLocationIconAsset() {
+    return {
+      LocationType.restaurants: 'assets/images/blue_pin.png',
+      LocationType.transport: 'assets/images/dark_blue_pin.png',
+      LocationType.cruises: 'assets/images/orange_pin.png',
+      LocationType.accommodation: 'assets/images/brown_pin.png',
+    }[_locationType];
+  }
+
   Future<BitmapDescriptor> _getLocationIconFromAsset(String assetPath) async {
     var installationBitmap = await Bitmap.fromProvider(AssetImage(assetPath));
-    var resizedInstallationBitmap = await bmp.resize(installationBitmap, 60, 100);
+    var resizedInstallationBitmap = await bmp.resize(installationBitmap, 50, 80);
     return await BitmapDescriptor.fromBytes(resizedInstallationBitmap.buildHeaded());
   }
 
@@ -459,9 +388,18 @@ class _PlacesPageState extends State<PlacesPage> {
     if (_isMapView) {
       _mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: _centers[_locationType],
-        zoom: _zoom
+        zoom: _zooms[_locationType]
       )));
     }
+  }
+
+  void _selectLocationType(LocationType type) async {
+    setState(() {
+      _selectedLocation = null;
+      _locationType = type;
+    });
+    await _setLocationIcons();
+    _centerMap();
   }
 }
 

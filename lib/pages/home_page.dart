@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:viaductharbour/blocs/viaduct_bloc.dart';
 import 'package:viaductharbour/blocs/viaduct_drawer_bloc.dart';
@@ -18,12 +19,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   ViaductBloc _bloc;
-  int _currentIndex = 0;
+  final int _currentIndex = 1;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bloc = ViaductBlocProvider.of(context).bloc;
+    _bloc = Provider.of<ViaductBloc>(context);
   }
 
   @override
@@ -53,15 +54,12 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
+            brightness: Brightness.light,
             title: Image.asset(
               'assets/images/VH_2020_Horizontal_Lockup_BLACK.png',
               width: size.width * 0.65,
             ),
-            centerTitle: false,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(theme.platform == TargetPlatform.iOS ? 10 : 0),
-              child: Container(),
-            ),
+            centerTitle: true,
           ),
           endDrawer: ViaductDrawerBlocProvider(
             child: ViaductDrawer(
@@ -90,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                       RestaurantCarousel(restaurants: restaurants),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(40, 40, 0, 10),
-                        child: Text(Strings.stayAndPlay),
+                        child: Text(Strings.accommodation),
                       ),
                       AccommodationCarousel(accommodations: accommodations),
                        Padding(
@@ -106,14 +104,16 @@ class _HomePageState extends State<HomePage> {
             currentIndex: _currentIndex,
             selectedItemColor: theme.accentColor,
             backgroundColor: theme.scaffoldBackgroundColor,
-            onTap: (index) => Navigator.of(context).pushNamed(Routes.places),
+            onTap: (index) => index == _currentIndex
+              ? null
+              : Navigator.of(context).popUntil(ModalRoute.withName(Routes.places)),
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                title: Text(Strings.home),
+                title: Text(Strings.places),
                 icon: Container()
               ),
               BottomNavigationBarItem(
-                title: Text(Strings.places),
+                title: Text(Strings.home),
                 icon: Container()
               )
             ],

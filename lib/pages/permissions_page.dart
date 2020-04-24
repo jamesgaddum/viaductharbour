@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:viaductharbour/blocs/permissions_bloc.dart';
 
 class PermissionsPage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bloc = PermissionsBlocProvider.of(context).bloc;
+    _bloc = Provider.of<PermissionsBloc>(context);
     _bloc.requestPermissions(context);
   }
 

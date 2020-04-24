@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:viaductharbour/blocs/viaduct_drawer_bloc.dart';
+import 'package:viaductharbour/pages/places_page.dart';
 import 'package:viaductharbour/routes.dart';
 import 'package:viaductharbour/strings.dart';
+import 'package:viaductharbour/widgets/marina_submenu.dart';
 
 class ViaductDrawer extends StatefulWidget {
 
@@ -42,8 +44,10 @@ class _ViaductDrawerState extends State<ViaductDrawer> {
             child: Container(
               color: theme.accentColor,
               height: size.height,
+              padding: EdgeInsets.only(left: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (!widget.hiddenMenuItems.contains(MenuItem.home)) ...[
                     Padding(padding: EdgeInsets.only(top: 10)),
@@ -55,16 +59,71 @@ class _ViaductDrawerState extends State<ViaductDrawer> {
                       onPressed: () => _navigateTo(Routes.home)
                     ),
                   ],
-                  if (!widget.hiddenMenuItems.contains(MenuItem.places)) ...[
+                  if (!widget.hiddenMenuItems.contains(MenuItem.eatAndDrink)) ...[
                     Padding(padding: EdgeInsets.only(top: 10)),
                     FlatButton(
                       child: Text(
-                        Strings.places,
+                        Strings.restaurants,
                         style: theme.accentTextTheme.body1,
                       ),
-                      onPressed: () => _navigateTo(Routes.places)
+                      onPressed: () => _navigateToWithArgs(
+                        Routes.places,
+                        {
+                          'locationType': LocationType.restaurants,
+                          'isMapView': true
+                        }
+                      )
                     ),
                   ],
+                  if (!widget.hiddenMenuItems.contains(MenuItem.accomodation)) ...[
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    FlatButton(
+                      child: Text(
+                        Strings.accommodation,
+                        style: theme.accentTextTheme.body1,
+                      ),
+                      onPressed: () => _navigateToWithArgs(
+                        Routes.places,
+                        {
+                          'locationType': LocationType.accommodation,
+                          'isMapView': true
+                        }
+                      )
+                    ),
+                  ],
+                  if (!widget.hiddenMenuItems.contains(MenuItem.cruises)) ...[
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    FlatButton(
+                      child: Text(
+                        Strings.cruises,
+                        style: theme.accentTextTheme.body1,
+                      ),
+                      onPressed: () => _navigateToWithArgs(
+                        Routes.places,
+                        {
+                          'locationType': LocationType.cruises,
+                          'isMapView': true
+                        }
+                      )
+                    ),
+                  ],
+                  if (!widget.hiddenMenuItems.contains(MenuItem.transport)) ...[
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    FlatButton(
+                      child: Text(
+                        Strings.transport,
+                        style: theme.accentTextTheme.body1,
+                      ),
+                      onPressed: () => _navigateToWithArgs(
+                        Routes.places,
+                        {
+                          'locationType': LocationType.transport,
+                          'isMapView': true
+                        }
+                      )
+                    ),
+                  ],
+                  MarinaSubMenu(hiddenMenuItems: widget.hiddenMenuItems,),
                   if (!widget.hiddenMenuItems.contains(MenuItem.contact)) ...[
                     Padding(padding: EdgeInsets.only(top: 10)),
                     FlatButton(
@@ -73,16 +132,6 @@ class _ViaductDrawerState extends State<ViaductDrawer> {
                         style: theme.accentTextTheme.body1,
                       ),
                       onPressed: () => _navigateTo(Routes.contact)
-                    ),
-                  ],
-                  if (!widget.hiddenMenuItems.contains(MenuItem.bookABerth)) ...[
-                    Padding(padding: EdgeInsets.only(top: 10)),
-                    FlatButton(
-                      child: Text(
-                        Strings.bookABerth,
-                        style: theme.accentTextTheme.body1,
-                      ),
-                      onPressed: () => _navigateTo(Routes.bookABerth)
                     ),
                   ],
                   if (!widget.hiddenMenuItems.contains(MenuItem.settings)) ...[
@@ -113,14 +162,26 @@ class _ViaductDrawerState extends State<ViaductDrawer> {
   }
 
   void _navigateTo(String route) async {
-    if (route == Routes.home) {
+    if (route == Routes.places) {
       await Navigator.of(context).popUntil(ModalRoute.withName(route));
       return;
     }
-    if (ModalRoute.of(context).settings.name == Routes.home) {
+    if (ModalRoute.of(context).settings.name == Routes.places) {
       await Navigator.of(context).pushNamed(route);
     } else {
       await Navigator.of(context).popAndPushNamed(route);
+    }
+  }
+
+  void _navigateToWithArgs(String route, dynamic arguments) async {
+    if (route == Routes.places) {
+      await Navigator.of(context).popUntil(ModalRoute.withName(route));
+      return;
+    }
+    if (ModalRoute.of(context).settings.name == Routes.places) {
+      await Navigator.of(context).pushNamed(route, arguments: arguments);
+    } else {
+      await Navigator.of(context).popAndPushNamed(route, arguments: arguments);
     }
   }
 
@@ -133,8 +194,14 @@ class _ViaductDrawerState extends State<ViaductDrawer> {
 
 enum MenuItem {
   home,
-  places,
+  eatAndDrink,
+  accomodation,
+  cruises,
+  transport,
+  marina,
   settings,
   contact,
-  bookABerth
+  bookABerth,
+  contractors,
+  marinaMap
 }

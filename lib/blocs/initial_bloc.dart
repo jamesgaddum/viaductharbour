@@ -10,7 +10,7 @@ class InitialBloc {
     try {
       var loggedInUser = await _userRepository.getLoggedInUser();
       if (loggedInUser != null) {
-        await Navigator.of(context).pushReplacementNamed(Routes.home);
+        await Navigator.of(context).pushReplacementNamed(Routes.places);
       } else {
         await Navigator.of(context).pushReplacementNamed(Routes.login);
       }
@@ -20,17 +20,4 @@ class InitialBloc {
   }
 
   void dispose() {}
-}
-
-class InitialBlocProvider extends InheritedWidget {
-
-  InitialBlocProvider({Widget child}) : super(child: child);
-
-  final bloc = InitialBloc();
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => true;
-
-  static InitialBlocProvider of(BuildContext context) =>
-    context.dependOnInheritedWidgetOfExactType();
 }

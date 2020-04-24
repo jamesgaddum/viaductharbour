@@ -8,4 +8,5 @@ class Routes {
   static const settings = '/settings';
   static const contact = '/contact';
   static const bookABerth = '/bookABerth';
+  static const contractors = '/contractors';
 }

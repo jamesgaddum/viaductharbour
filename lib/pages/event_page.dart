@@ -83,7 +83,7 @@ class EventPage extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               Padding(
-                padding: const EdgeInsets.fromLTRB(15, 20, 15, 50),
+                padding: const EdgeInsets.fromLTRB(15, 30, 15, 50),
                 child: Container(
                   child: Text(
                     event.description,
